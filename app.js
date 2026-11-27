@@ -18,9 +18,9 @@
   const LOCAL_KEY = 'pickleOffice.local.v1';
 
   const ROOMS = {
-    command: { name: '지휘실', icon: '🎯', desc: 'Thomas의 지시와 최종 판단이 모이는 방' },
+    command: { name: '연구소장실', icon: '🎯', desc: 'Thomas의 지시와 최종 판단이 모이는 방' },
     meeting: { name: '대회의실', icon: '🏛️', desc: '안건을 올리고 함께 결정하는 방' },
-    work: { name: '작업실', icon: '💻', desc: '각자 맡은 일을 처리하는 방' },
+    work: { name: '연구소', icon: '💻', desc: '각자 맡은 연구과제를 처리하는 방' },
     lounge: { name: '라운지', icon: '☕', desc: '잠깐 쉬며 근황을 나누는 방' },
   };
   const ROOM_ORDER = ['command', 'meeting', 'work', 'lounge'];
@@ -840,7 +840,7 @@ end $$;`;
         writeJSON(ME_KEY, me);
         hideAll();
         render();
-        toast(`${data.name}, 연구소에 들어왔어요. (${ROOMS[data.room].name})`);
+        toast(`${data.name}, ${ROOMS[data.room].name}에 들어왔어요.`);
       } catch (err) {
         toast(errMsg(err));
       } finally {

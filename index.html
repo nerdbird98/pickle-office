@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f3e7d2" />
   <meta name="description" content="Thomas 전용 연구소 — Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한곳에서 나눕니다." />
   <meta property="og:title" content="👑 Thomas 연구소" />
-  <meta property="og:description" content="Piccolo & 동료 피클 전용 — 오피스 맵, 회의실, 작업실, 메모" />
+  <meta property="og:description" content="Piccolo & 동료 피클 전용 — 오피스 맵, 회의실, 연구소, 메모" />
   <title>👑 Thomas 연구소</title>
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="icon" type="image/png" href="assets/apple-touch-icon.png" />
@@ -32,7 +32,7 @@
     <nav class="tabs" id="tabs" role="tablist" aria-label="연구소 메뉴">
       <button class="tab active" role="tab" data-tab="map" aria-selected="true" aria-controls="panel-map">🗺️ 오피스 맵</button>
       <button class="tab" role="tab" data-tab="meeting" aria-selected="false" aria-controls="panel-meeting">💬 회의실</button>
-      <button class="tab" role="tab" data-tab="tasks" aria-selected="false" aria-controls="panel-tasks">📋 작업실</button>
+      <button class="tab" role="tab" data-tab="tasks" aria-selected="false" aria-controls="panel-tasks">📋 연구과제</button>
       <button class="tab" role="tab" data-tab="agents" aria-selected="false" aria-controls="panel-agents">📊 비서현황</button>
       <button class="tab" role="tab" data-tab="memo" aria-selected="false" aria-controls="panel-memo">📝 메모</button>
     </nav>
@@ -55,15 +55,15 @@
 
         <div class="card map-card">
           <div class="map" id="map">
-            <img src="assets/office-map.png" alt="Thomas 전용 클레이 오피스 디오라마 — 회의실, 지휘실, 작업실, 라운지" />
+            <img src="assets/office-map.png" alt="Thomas 전용 클레이 오피스 디오라마 — 대회의실, 연구소장실, 연구소, 라운지" />
             <button class="pin" type="button" data-room="command" style="--x:58.5%;--y:37%">
-              <span class="pin-dot"></span><span class="pin-name">🎯 지휘실</span><em class="pin-count">0</em>
+              <span class="pin-dot"></span><span class="pin-name">🎯 연구소장실</span><em class="pin-count">0</em>
             </button>
             <button class="pin" type="button" data-room="meeting" style="--x:20%;--y:53%">
               <span class="pin-dot"></span><span class="pin-name">🏛️ 대회의실</span><em class="pin-count">0</em>
             </button>
             <button class="pin" type="button" data-room="work" style="--x:48%;--y:62%">
-              <span class="pin-dot"></span><span class="pin-name">💻 작업실</span><em class="pin-count">0</em>
+              <span class="pin-dot"></span><span class="pin-name">💻 연구소</span><em class="pin-count">0</em>
             </button>
             <button class="pin" type="button" data-room="lounge" style="--x:79%;--y:80%">
               <span class="pin-dot"></span><span class="pin-name">☕ 라운지</span><em class="pin-count">0</em>
@@ -95,10 +95,10 @@
         <div class="list" id="meetingList"></div>
       </section>
 
-      <!-- ===== 작업실 ===== -->
+      <!-- ===== 연구과제 ===== -->
       <section class="panel" id="panel-tasks" role="tabpanel" aria-labelledby="tab-tasks" hidden>
         <div class="card hero">
-          <span class="eyebrow">📋 작업실</span>
+          <span class="eyebrow">📋 연구과제</span>
           <h2>맡은 일을 카드로 관리해요</h2>
           <p class="hero-sub">카드를 추가하고, 끝나면 체크하세요.</p>
         </div>
@@ -232,6 +232,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="config.js?v=1" defer></script>
-  <script src="app.js?v=3" defer></script>
+  <script src="app.js?v=4" defer></script>
 </body>
 </html>
