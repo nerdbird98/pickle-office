@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-27T22:45:00+09:00",
+  "events": {
+    "title": "이벤트 응모 현황",
+    "subtitle": "Piccolo가 대신 응모하고 당첨 발표를 챙깁니다",
+    "items": [
+      {
+        "icon": "📝",
+        "title": "공공기관 설문 경품 응모",
+        "status": "누적 25건 완료",
+        "note": "매일 12:30 자동 응모 중",
+        "tone": "done"
+      },
+      {
+        "icon": "⚡",
+        "title": "한국전력 전력퀴즈",
+        "status": "응모 완료",
+        "note": "11/30 마감 · 당첨 시 문자 안내",
+        "tone": "done"
+      },
+      {
+        "icon": "🎁",
+        "title": "네이버 무료체험단 (닥터펩티 세럼)",
+        "status": "2건 응모 완료",
+        "note": "12/2 발표",
+        "tone": "done"
+      },
+      {
+        "icon": "🎱",
+        "title": "로또 1252회 (5게임) · 연금복권 344회 (5조합)",
+        "status": "참여 번호 기록 완료",
+        "note": "토/목 추첨 비교",
+        "tone": "watch"
+      }
+    ]
+  },
+  "draws": {
+    "title": "로또·연금복권 예측 & 결과 비교",
+    "subtitle": "당첨 번호만 채우면 자동으로 등수까지 비교합니다",
+    "items": [
+      {
+        "game": "로또 6/45",
+        "round": "1252회",
+        "drawLabel": "11/28(토) 21:15 추첨",
+        "drawAt": "2026-11-28T21:15:00+09:00",
+        "status": "추첨 대기",
+        "compareNote": "추첨 대기 (11/28 21:15 비교 예정)",
+        "winning": null,
+        "bonus": null,
+        "plays": [
+          { "label": "1게임", "numbers": [4, 13, 18, 19, 34, 38] },
+          { "label": "2게임", "numbers": [14, 16, 17, 29, 30, 42] },
+          { "label": "3게임", "numbers": [3, 6, 12, 22, 27, 37] },
+          { "label": "4게임", "numbers": [11, 15, 24, 28, 39, 45] },
+          { "label": "5게임", "numbers": [1, 8, 23, 35, 36, 40] }
+        ]
+      },
+      {
+        "game": "연금복권720+",
+        "round": "344회",
+        "drawLabel": "12/3(목) 19:30 추첨",
+        "drawAt": "2026-12-03T19:30:00+09:00",
+        "status": "추첨 대기",
+        "compareNote": "추첨 대기 (12/3 19:30 비교 예정)",
+        "note": "세트 1순위 634912",
+        "winning": null,
+        "winningGroup": null,
+        "plays": [
+          { "label": "1게임", "group": 3, "digits": "634910" },
+          { "label": "2게임", "group": 4, "digits": "161347" },
+          { "label": "3게임", "group": 1, "digits": "631912" },
+          { "label": "4게임", "group": 2, "digits": "054519" },
+          { "label": "5게임", "group": 5, "digits": "813548" }
+        ]
+      }
+    ]
+  }
+}

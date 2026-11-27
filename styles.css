@@ -400,6 +400,68 @@ code{background:#f2e6d3;border-radius:6px;padding:1px 5px;font-size:.92em}
   margin-top:18px;padding:10px 6px 0;font-size:11.5px;color:#a4967f;
 }
 
+/* ---------- 투자연구소 보드 (칠판 · 현황판) ---------- */
+.modal-card.wide{max-width:min(880px,96vw)}
+.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 6px;align-items:start}
+.board{position:relative;border-radius:14px;padding:12px 13px 13px;overflow:hidden}
+.board-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.board-head h4{margin:0;font-size:13px;letter-spacing:-.3px}
+.board-chip{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.16);color:#f4f6ea;white-space:nowrap}
+.board-foot{margin:9px 0 0;font-size:10.5px;line-height:1.4;opacity:.72}
+
+/* 칠판 */
+.board--chalk{
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,.07), transparent 42%),
+    radial-gradient(circle at 78% 76%, rgba(255,255,255,.05), transparent 46%),
+    linear-gradient(165deg,#2b4b40,#1e3730 62%,#254a3f);
+  border:6px solid #8a5a33;border-radius:12px;
+  box-shadow:inset 0 0 26px rgba(0,0,0,.38),0 7px 16px rgba(90,60,30,.18);
+  color:#edf2e6;
+}
+.board--chalk .board-head h4{color:#f7f8f0;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.chalk-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chalk-row{display:grid;grid-template-columns:15px 1fr auto;gap:8px;align-items:start;padding-bottom:8px;border-bottom:1px dashed rgba(255,255,255,.18)}
+.chalk-row:last-child{padding-bottom:0;border-bottom:0}
+.chalk-box{width:13px;height:13px;margin-top:2px;border:1.4px solid rgba(255,255,255,.72);border-radius:3px;display:grid;place-items:center;font-size:10px;line-height:1;color:#e9f2dc}
+.chalk-row.done .chalk-box::after{content:"✓"}
+.chalk-row.watch .chalk-box{border-color:#f6e39a}
+.chalk-title{display:block;font-size:12px;font-weight:700;line-height:1.35;color:#f3f6ea}
+.chalk-note{display:block;font-size:10.5px;line-height:1.35;margin-top:2px;color:rgba(236,243,228,.66)}
+.chalk-status{font-size:10.5px;font-weight:800;color:#fdf3bf;white-space:nowrap;text-align:right;line-height:1.35;max-width:42%}
+.chalk-foot{color:rgba(236,243,228,.62)}
+
+/* 현황판 (로또 · 연금복권) */
+.board--status{background:linear-gradient(170deg,#fffdf6,#f7ecd9);border:1px solid #e6d4b8;box-shadow:var(--shadow-soft)}
+.board--status .board-chip{background:#f0e0c3;color:#8a6231}
+.draw-block+.draw-block{margin-top:11px;padding-top:11px;border-top:1px dashed #e3d3ba}
+.draw-top{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.draw-top b{font-size:12.5px;letter-spacing:-.2px}
+.draw-status{font-size:10px;font-weight:800;color:#9a6b1f;background:#f8e9c9;padding:2px 7px;border-radius:999px;white-space:nowrap}
+.draw-when{margin:2px 0 7px;font-size:10.5px;color:var(--muted)}
+.draw-win{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:0 0 7px}
+.draw-win-label{font-size:10px;font-weight:800;color:#8a6231;background:#f2e2c6;border-radius:6px;padding:1px 6px;margin-right:2px}
+.draw-bonus{font-size:10px;font-weight:800;color:#8a6231}
+.play-list{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.play-list li{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.play-label{flex:0 0 32px;font-size:9.5px;color:var(--muted);font-weight:700}
+.ball-row{display:flex;gap:3px}
+.ball{width:19px;height:19px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;font-style:normal;color:#fff;box-shadow:inset 0 -2px 3px rgba(0,0,0,.2)}
+.ball.sm{width:17px;height:17px;font-size:9.5px}
+.b-y{background:#dfa62a}.b-b{background:#3f7fbf}.b-r{background:#c8564c}.b-g{background:#8f939b}.b-e{background:#3f9c68}
+.ball.hit{outline:2px solid #3f9c68;outline-offset:1px}
+.pension{display:inline-flex;align-items:center;gap:5px}
+.pgroup{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:6px;background:#efe0c8;color:#7a5a35;flex:0 0 auto}
+.pdigit{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;font-weight:700;letter-spacing:.4px;color:var(--ink)}
+.pdigit .pd-hit{color:#2f7d54;text-decoration:underline;text-underline-offset:2px}
+.play-result{margin-left:auto;font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:999px;white-space:nowrap}
+.play-result.win{background:#e3f2e7;color:#2f7d54}
+.play-result.miss{background:#f1ece2;color:#9d8f7c}
+.draw-note{margin:6px 0 0;font-size:10px;color:#8a6c4c}
+.draw-compare{margin:7px 0 0;font-size:10.5px;line-height:1.4;color:#7d6039;background:#f6ecd8;border-radius:8px;padding:5px 7px}
+.lab-note{margin:8px 2px 0;font-size:10px;color:var(--muted)}
+@media (max-width:700px){.lab-grid{grid-template-columns:1fr}}
+
 /* ---------- 작은 화면 ---------- */
 @media (max-width:620px){
   .app{padding-left:11px;padding-right:11px}

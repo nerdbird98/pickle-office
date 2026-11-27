@@ -22,8 +22,9 @@
     meeting: { name: '대회의실', icon: '🏛️', desc: '안건을 올리고 함께 결정하는 방' },
     work: { name: '연구소', icon: '💻', desc: '각자 맡은 연구과제를 처리하는 방' },
     lounge: { name: '라운지', icon: '☕', desc: '잠깐 쉬며 근황을 나누는 방' },
+    invest: { name: '투자연구소', icon: '📈', desc: '금융 차트와 응모·추첨 현황을 칠판에 붙여 두고 보는 방' },
   };
-  const ROOM_ORDER = ['command', 'meeting', 'work', 'lounge'];
+  const ROOM_ORDER = ['command', 'meeting', 'work', 'lounge', 'invest'];
 
   const STATUS = {
     working: { label: '작업 중', color: '#c9892c' },
@@ -33,6 +34,60 @@
   };
 
   const EMOJIS = ['🐰', '🐶', '🐑', '🐻', '🦊', '🐱', '🐼', '🐤', '🦉', '🐢'];
+
+  /* =========================================================
+     투자연구소 칠판/현황판
+     실제 내용은 data/invest-board.json 에 있고, 그 파일을 못 읽으면
+     아래 기본값으로 보여 줍니다. 매주 추첨 결과는 JSON만 고치면 됩니다.
+     ========================================================= */
+  const INVEST_BOARD_URL = 'data/invest-board.json?v=1';
+  const INVEST_BOARD_BASE = {
+    events: {
+      title: '이벤트 응모 현황',
+      subtitle: 'Piccolo가 대신 응모하고 당첨 발표를 챙깁니다',
+      items: [
+        { icon: '📝', title: '공공기관 설문 경품 응모', status: '누적 25건 완료', note: '매일 12:30 자동 응모 중', tone: 'done' },
+        { icon: '⚡', title: '한국전력 전력퀴즈', status: '응모 완료', note: '11/30 마감 · 당첨 시 문자 안내', tone: 'done' },
+        { icon: '🎁', title: '네이버 무료체험단 (닥터펩티 세럼)', status: '2건 응모 완료', note: '12/2 발표', tone: 'done' },
+        { icon: '🎱', title: '로또 1252회 (5게임) · 연금복권 344회 (5조합)', status: '참여 번호 기록 완료', note: '토/목 추첨 비교', tone: 'watch' },
+      ],
+    },
+    draws: {
+      title: '로또·연금복권 예측 & 결과 비교',
+      subtitle: '당첨 번호만 채우면 자동으로 등수까지 비교합니다',
+      items: [
+        {
+          game: '로또 6/45', round: '1252회',
+          drawLabel: '11/28(토) 21:15 추첨', status: '추첨 대기',
+          compareNote: '추첨 대기 (11/28 21:15 비교 예정)',
+          winning: null, bonus: null,
+          plays: [
+            { label: '1게임', numbers: [4, 13, 18, 19, 34, 38] },
+            { label: '2게임', numbers: [14, 16, 17, 29, 30, 42] },
+            { label: '3게임', numbers: [3, 6, 12, 22, 27, 37] },
+            { label: '4게임', numbers: [11, 15, 24, 28, 39, 45] },
+            { label: '5게임', numbers: [1, 8, 23, 35, 36, 40] },
+          ],
+        },
+        {
+          game: '연금복권720+', round: '344회',
+          drawLabel: '12/3(목) 19:30 추첨', status: '추첨 대기',
+          compareNote: '추첨 대기 (12/3 19:30 비교 예정)',
+          note: '세트 1순위 634912',
+          winning: null, winningGroup: null,
+          plays: [
+            { label: '1게임', group: 3, digits: '634910' },
+            { label: '2게임', group: 4, digits: '161347' },
+            { label: '3게임', group: 1, digits: '631912' },
+            { label: '4게임', group: 2, digits: '054519' },
+            { label: '5게임', group: 5, digits: '813548' },
+          ],
+        },
+      ],
+    },
+  };
+  let investBoard = INVEST_BOARD_BASE;
+  let boardFetched = false;
 
   /* Supabase SQL Editor에 한 번 붙여 넣으면 되는 스키마 */
   const SCHEMA_SQL = `-- Thomas 연구소 · Supabase 테이블
@@ -697,10 +752,162 @@ end $$;`;
     toastTimer = setTimeout(() => { t.hidden = true; }, 3000);
   }
 
+  /* ---------- 투자연구소 보드 ---------- */
+  function mergeBoard(base, data) {
+    if (!data || typeof data !== 'object') return base;
+    const out = { ...base, ...data };
+    out.events = { ...base.events, ...(data.events || {}) };
+    if (!Array.isArray(out.events.items)) out.events.items = base.events.items;
+    out.draws = { ...base.draws, ...(data.draws || {}) };
+    if (!Array.isArray(out.draws.items)) out.draws.items = base.draws.items;
+    return out;
+  }
+
+  async function loadInvestBoard() {
+    try {
+      const res = await fetch(INVEST_BOARD_URL, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      investBoard = mergeBoard(INVEST_BOARD_BASE, await res.json());
+      boardFetched = true;
+    } catch (e) {
+      console.warn('[invest-board] 기본값으로 표시합니다', e);
+      investBoard = INVEST_BOARD_BASE;
+    }
+    if (openRoomKey === 'invest') openRoom('invest');
+  }
+
+  function ballClass(n) {
+    const v = Number(n);
+    if (v <= 10) return 'b-y';
+    if (v <= 20) return 'b-b';
+    if (v <= 30) return 'b-r';
+    if (v <= 40) return 'b-g';
+    return 'b-e';
+  }
+
+  function rankPill(rank, extra) {
+    if (!rank) return '';
+    const win = rank !== '낙첨';
+    return `<span class="play-result ${win ? 'win' : 'miss'}">${esc(rank)}${extra ? ` · ${esc(extra)}` : ''}</span>`;
+  }
+
+  function lottoResult(play, draw) {
+    if (!draw || !Array.isArray(draw.winning) || draw.winning.length < 6) return null;
+    const win = draw.winning.map(Number);
+    const mine = (play.numbers || []).map(Number);
+    const hits = mine.filter((n) => win.includes(n));
+    const bonus = Number(draw.bonus || 0);
+    const n = hits.length;
+    let rank = '낙첨';
+    if (n === 6) rank = '1등';
+    else if (n === 5 && bonus && mine.includes(bonus)) rank = '2등';
+    else if (n === 5) rank = '3등';
+    else if (n === 4) rank = '4등';
+    else if (n === 3) rank = '5등';
+    return { hits, rank };
+  }
+
+  function pensionResult(play, draw) {
+    if (!draw || draw.winning == null || draw.winning === '') return null;
+    const w = String(draw.winning).replace(/\D/g, '').padStart(6, '0');
+    const mine = String(play.digits || '').replace(/\D/g, '').padStart(6, '0');
+    let tail = 0;
+    for (let i = 5; i >= 0; i -= 1) {
+      if (mine[i] === w[i]) tail += 1; else break;
+    }
+    const sameGroup = draw.winningGroup != null && Number(draw.winningGroup) === Number(play.group);
+    let rank = '낙첨';
+    if (tail === 6 && sameGroup) rank = '1등';
+    else if (tail === 6) rank = '2등';
+    else if (tail === 5) rank = '3등';
+    else if (tail === 4) rank = '4등';
+    else if (tail === 3) rank = '5등';
+    return { rank, tail };
+  }
+
+  function drawPlayRow(play, draw) {
+    if (Array.isArray(play.numbers)) {
+      const r = lottoResult(play, draw);
+      const balls = play.numbers.map((n) => {
+        const hit = r && r.hits.includes(Number(n));
+        return `<i class="ball ${ballClass(n)}${hit ? ' hit' : ''}">${esc(n)}</i>`;
+      }).join('');
+      return `<li><span class="play-label">${esc(play.label || '')}</span><span class="ball-row">${balls}</span>${r ? rankPill(r.rank, `${r.hits.length}개`) : ''}</li>`;
+    }
+    const digits = String(play.digits || '').replace(/\D/g, '').padStart(6, '0');
+    const r = pensionResult(play, draw);
+    const chars = digits.split('').map((c, i) => {
+      const hit = r && i >= 6 - r.tail;
+      const gap = i === 3 ? ' style="margin-left:4px"' : '';
+      return `<span class="${hit ? 'pd-hit' : ''}"${gap}>${esc(c)}</span>`;
+    }).join('');
+    return `<li><span class="play-label">${esc(play.label || '')}</span><span class="pension"><span class="pgroup">${esc(play.group)}조</span><span class="pdigit">${chars}</span></span>${r ? rankPill(r.rank) : ''}</li>`;
+  }
+
+  function drawBlockHTML(d) {
+    const winning = Array.isArray(d.winning) && d.winning.length
+      ? `<p class="draw-win"><span class="draw-win-label">당첨</span>${d.winning.map((n) => `<i class="ball ${ballClass(n)} sm">${esc(n)}</i>`).join('')}${d.bonus ? `<span class="draw-bonus">+${esc(d.bonus)}</span>` : ''}</p>`
+      : (d.winning ? `<p class="draw-win"><span class="draw-win-label">당첨</span><span class="pension"><span class="pgroup">${esc(d.winningGroup)}조</span><span class="pdigit">${esc(String(d.winning).replace(/(\d{3})(\d{3})/, '$1 $2'))}</span></span></p>` : '');
+
+    return `
+      <div class="draw-block">
+        <div class="draw-top">
+          <b>${esc(d.game || '')} ${esc(d.round || '')}</b>
+          <span class="draw-status">${esc(d.status || '추첨 대기')}</span>
+        </div>
+        <p class="draw-when">🗓 ${esc(d.drawLabel || '')}</p>
+        ${winning}
+        <ol class="play-list">${(d.plays || []).map((p) => drawPlayRow(p, d)).join('')}</ol>
+        ${d.note ? `<p class="draw-note">📌 ${esc(d.note)}</p>` : ''}
+        <p class="draw-compare">🔎 ${esc(d.compareNote || (d.winning ? '비교 완료' : '추첨 대기'))}</p>
+      </div>`;
+  }
+
+  function investBoardHTML() {
+    const b = investBoard || INVEST_BOARD_BASE;
+    const ev = b.events || {};
+    const items = Array.isArray(ev.items) ? ev.items : [];
+    const draws = b.draws || {};
+    const list = Array.isArray(draws.items) ? draws.items : [];
+
+    const rows = items.map((it) => `
+      <li class="chalk-row${it.tone === 'watch' ? ' watch' : ' done'}">
+        <span class="chalk-box" aria-hidden="true"></span>
+        <span class="chalk-body">
+          <span class="chalk-title">${esc(it.icon || '•')} ${esc(it.title || '')}</span>
+          ${it.note ? `<span class="chalk-note">${esc(it.note)}</span>` : ''}
+        </span>
+        <span class="chalk-status">${esc(it.status || '')}</span>
+      </li>`).join('');
+
+    return `
+      <div class="lab-grid">
+        <section class="board board--chalk" aria-label="이벤트 응모 현황">
+          <div class="board-head">
+            <h4>✍️ ${esc(ev.title || '이벤트 응모 현황')}</h4>
+            <span class="board-chip">${items.length}건</span>
+          </div>
+          <ul class="chalk-list">${rows || '<li class="chalk-row"><span class="chalk-box"></span><span class="chalk-body"><span class="chalk-title">아직 응모 기록이 없어요</span></span></li>'}</ul>
+          ${ev.subtitle ? `<p class="board-foot chalk-foot">${esc(ev.subtitle)}</p>` : ''}
+        </section>
+        <section class="board board--status" aria-label="로또·연금복권 현황판">
+          <div class="board-head">
+            <h4>🎯 ${esc(draws.title || '로또·연금복권 예측 & 결과 비교')}</h4>
+            <span class="board-chip soft">${list.length}건</span>
+          </div>
+          ${list.map(drawBlockHTML).join('') || '<p class="muted small">진행 중인 추첨이 없어요.</p>'}
+          ${draws.subtitle ? `<p class="board-foot">${esc(draws.subtitle)}</p>` : ''}
+        </section>
+      </div>
+      <p class="lab-note">${boardFetched ? 'data/invest-board.json 에서 불러왔어요' : '기본값으로 표시 중 — data/invest-board.json 을 읽지 못했어요'}</p>`;
+  }
+
   function openRoom(key) {
     const room = ROOMS[key];
     if (!room) return;
     openRoomKey = key;
+    const card = $('#roomModal .modal-card');
+    if (card) card.classList.toggle('wide', key === 'invest');
     const list = sortAgents(state.agents.filter((a) => a.room === key));
     const counts = Object.entries(STATUS)
       .map(([k, v]) => ({ v, n: list.filter((a) => a.status === k).length }))
@@ -719,6 +926,7 @@ end $$;`;
       <div class="chips">
         <span class="chip">👥 <b>${list.length}</b>명</span>${counts}
       </div>
+      ${key === 'invest' ? investBoardHTML() : ''}
       <div class="room-list">
         ${list.length ? list.map(agentCard).join('') : '<div class="empty">아직 이 방에 비서가 없어요.<br>아래 버튼으로 이 방에 참여해 보세요.</div>'}
       </div>
@@ -1004,6 +1212,7 @@ end $$;`;
 
     migrateNames();
     await refresh();
+    loadInvestBoard();
 
     const hash = (location.hash || '').replace('#', '');
     if (['map', 'meeting', 'tasks', 'agents', 'memo'].includes(hash)) switchTab(hash);

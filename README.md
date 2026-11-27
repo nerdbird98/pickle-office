@@ -11,7 +11,7 @@ Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 �
 
 | 탭 | 하는 일 |
 |---|---|
-| 🗺️ 오피스 맵 | 클레이 오피스 그림 위의 방 핀(🎯 연구소장실 · 🏛️ 대회의실 · 💻 연구소 · ☕ 라운지)을 누르면 그 방 비서들의 상태·할 일·최근 한 마디가 열립니다. |
+| 🗺️ 오피스 맵 | 클레이 오피스 그림 위의 방 핀(🎯 연구소장실 · 🏛️ 대회의실 · 💻 연구소 · ☕ 라운지 · 📈 투자연구소)을 누르면 그 방 비서들의 상태·할 일·최근 한 마디가 열립니다. **📈 투자연구소** 방에는 칠판(이벤트 응모 현황)과 현황판(로또·연금복권 예측 & 결과 비교)이 함께 열립니다. |
 | 💬 회의실 | 안건과 대화를 남깁니다. |
 | 📋 연구과제 | 연구과제 카드 추가 · 완료 체크 · 삭제, 진행률 표시. |
 | 📊 비서현황 | 방·상태별 비서 목록과 인원 요약. |
@@ -40,6 +40,16 @@ Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 �
 > anon key는 공개되어도 되는 키입니다. 다만 링크를 아는 사람은 누구나 글을 남길 수 있으니
 > 이 페이지에는 민감한 정보(비밀번호, 카드, 주민번호 등)를 적지 마세요.
 
+## 투자연구소 현황판 갱신
+
+`data/invest-board.json`만 고치면 페이지에 바로 반영됩니다(앱은 이 파일을 읽고, 실패하면 `app.js`의 기본값 사용).
+
+- `events.items` — 이벤트 응모 현황(아이콘·제목·상태·메모·`tone: done|watch`)
+- `draws.items` — 회차별 추첨. 로또는 `winning: [1등 6개]`, `bonus`를 채우고,
+  연금복권은 `winning: "634910"`, `winningGroup: 3`을 채우면 각 게임의 등수가 자동 계산됩니다.
+- 파일을 바꾼 뒤 `index.html`의 `data/invest-board.json?v=` 숫자와 `app.js?v=` 숫자를 하나 올리면
+  브라우저 캐시 없이 새 내용으로 열립니다.
+
 ## 파일
 
 ```
@@ -47,9 +57,10 @@ index.html          화면 구조 (탭 5개 + 모달 3개)
 styles.css          아이보리·우드·클레이 테마, 모바일 대응
 app.js              상태·저장(localStorage/Supabase)·Realtime·렌더링
 config.js           (선택) Supabase URL·anon key 코드 설정
+data/invest-board.json  투자연구소 칠판·현황판 내용 (응모 현황, 추첨 회차·번호·결과)
 supabase/schema.sql Supabase 테이블·정책·Realtime SQL
 manifest.webmanifest  홈 화면 추가(PWA) 설정 — 이름·색·아이콘
-assets/office-map.png  Thomas 전용 클레이 오피스 이미지
+assets/office-map.png  Thomas 전용 클레이 오피스 이미지 (5개 방)
 assets/apple-touch-icon.png  홈 화면 아이콘 180×180 (Piccolo 크롭)
 assets/icon-512.png   홈 화면 아이콘 512×512
 ```
