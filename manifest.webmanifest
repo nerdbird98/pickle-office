@@ -1,6 +1,6 @@
 {
-  "name": "Thomas 합동 비서실",
-  "short_name": "Thomas 비서실",
+  "name": "Thomas 연구소",
+  "short_name": "Thomas 연구소",
   "start_url": "/pickle-office/",
   "display": "standalone",
   "background_color": "#f5ede0",

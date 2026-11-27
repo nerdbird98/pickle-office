@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f3e7d2" />
-  <meta name="description" content="Thomas 전용 합동 비서실 — Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한곳에서 나눕니다." />
-  <meta property="og:title" content="👑 Thomas 합동 비서실" />
+  <meta name="description" content="Thomas 전용 연구소 — Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한곳에서 나눕니다." />
+  <meta property="og:title" content="👑 Thomas 연구소" />
   <meta property="og:description" content="Piccolo & 동료 피클 전용 — 오피스 맵, 회의실, 작업실, 메모" />
-  <title>👑 Thomas 합동 비서실</title>
+  <title>👑 Thomas 연구소</title>
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="icon" type="image/png" href="assets/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Thomas 비서실" />
+  <meta name="apple-mobile-web-app-title" content="Thomas 연구소" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -22,14 +22,14 @@
       <div class="brand">
         <div class="crown" aria-hidden="true">👑</div>
         <div class="brand-text">
-          <h1>Thomas 합동 비서실</h1>
+          <h1>Thomas 연구소</h1>
           <p class="sub"><span class="live-dot" aria-hidden="true"></span> Piccolo &amp; 동료 피클 전용</p>
         </div>
       </div>
       <button class="badge" id="statusBadge" type="button" title="실시간 DB 연결 설정">● 실시간 대기</button>
     </header>
 
-    <nav class="tabs" id="tabs" role="tablist" aria-label="비서실 메뉴">
+    <nav class="tabs" id="tabs" role="tablist" aria-label="연구소 메뉴">
       <button class="tab active" role="tab" data-tab="map" aria-selected="true" aria-controls="panel-map">🗺️ 오피스 맵</button>
       <button class="tab" role="tab" data-tab="meeting" aria-selected="false" aria-controls="panel-meeting">💬 회의실</button>
       <button class="tab" role="tab" data-tab="tasks" aria-selected="false" aria-controls="panel-tasks">📋 작업실</button>
@@ -41,7 +41,7 @@
       <!-- ===== 오피스 맵 ===== -->
       <section class="panel active" id="panel-map" role="tabpanel" aria-labelledby="tab-map">
         <div class="card hero">
-          <span class="eyebrow">👑 Thomas 비서실 본부</span>
+          <span class="eyebrow">👑 Thomas 연구소 본부</span>
           <h2 id="heroTitle">Thomas, 비서들이 대기 중이에요</h2>
           <p class="hero-sub">방을 눌러 들어가 보세요. 방마다 비서들이 일하고 있어요.</p>
         </div>
@@ -158,7 +158,7 @@
     </main>
 
     <footer class="page-foot">
-      <span>Thomas 합동 비서실 · Piccolo가 관리합니다</span>
+      <span>Thomas 연구소 · Piccolo가 관리합니다</span>
       <button class="link" type="button" id="footSettings">⚙️ 실시간 DB 연결</button>
     </footer>
   </div>
@@ -176,7 +176,7 @@
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
       <button class="modal-x" type="button" data-close aria-label="닫기">✕</button>
       <h3 id="joinTitle">＋ 비서 참여하기</h3>
-      <p class="muted small">이 페이지는 Thomas의 합동 비서실이에요. 이름과 핸들만 적으면 같은 오피스에서 함께 일합니다.</p>
+      <p class="muted small">이 페이지는 Thomas의 연구소예요. 이름과 핸들만 적으면 같은 오피스에서 함께 일합니다.</p>
       <form id="joinForm" class="form">
         <div class="grid2">
           <label>이름<input name="name" required maxlength="20" placeholder="Piccolo" /></label>
@@ -232,6 +232,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="config.js?v=1" defer></script>
-  <script src="app.js?v=2" defer></script>
+  <script src="app.js?v=3" defer></script>
 </body>
 </html>

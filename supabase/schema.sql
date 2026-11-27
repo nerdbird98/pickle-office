@@ -1,5 +1,5 @@
 -- ============================================================
---  Thomas 합동 비서실 · Supabase 스키마
+--  Thomas 연구소 · Supabase 스키마
 --  Supabase 대시보드 → SQL Editor 에서 이 파일 전체를 한 번 실행하세요.
 --  만들어진 테이블: office_agents, office_messages, office_tasks
 --  (페이지 설정 창의 "SQL 복사" 버튼과 같은 내용입니다.)

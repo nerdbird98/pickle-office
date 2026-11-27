@@ -1,5 +1,5 @@
 /* =========================================================
-   Thomas 합동 비서실 — app.js
+   Thomas 연구소 — app.js
    localStorage 즉시 동작 + Supabase 실시간 동기화(선택)
    ========================================================= */
 (() => {
@@ -35,7 +35,7 @@
   const EMOJIS = ['🐰', '🐶', '🐑', '🐻', '🦊', '🐱', '🐼', '🐤', '🦉', '🐢'];
 
   /* Supabase SQL Editor에 한 번 붙여 넣으면 되는 스키마 */
-  const SCHEMA_SQL = `-- Thomas 합동 비서실 · Supabase 테이블
+  const SCHEMA_SQL = `-- Thomas 연구소 · Supabase 테이블
 create extension if not exists pgcrypto;
 
 create table if not exists public.office_agents (
@@ -180,7 +180,7 @@ end $$;`;
     owner: 'Thomas',
     room: 'command',
     status: 'working',
-    task: '합동 비서실 페이지 배포 마무리',
+    task: '연구소 페이지 배포 마무리',
     line: 'Thomas, 오피스 맵부터 눌러 보세요.',
   };
 
@@ -840,7 +840,7 @@ end $$;`;
         writeJSON(ME_KEY, me);
         hideAll();
         render();
-        toast(`${data.name}, 비서실에 들어왔어요. (${ROOMS[data.room].name})`);
+        toast(`${data.name}, 연구소에 들어왔어요. (${ROOMS[data.room].name})`);
       } catch (err) {
         toast(errMsg(err));
       } finally {
@@ -857,7 +857,7 @@ end $$;`;
 
     $('#deleteMeBtn').addEventListener('click', async () => {
       if (!me) return;
-      if (!confirm(`${me.name}(${me.handle})을(를) 비서실에서 삭제할까요?`)) return;
+      if (!confirm(`${me.name}(${me.handle})을(를) 연구소에서 삭제할까요?`)) return;
       try {
         await removeAgent(me.handle);
         me = null;
