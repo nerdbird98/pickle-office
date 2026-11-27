@@ -143,6 +143,18 @@ end $$;`;
     return s.startsWith('@') ? s : '@' + s;
   }
 
+  /* 이름 뒤에 붙는 '으로/로' 조사 (받침 유무) */
+  function roJosa(word) {
+    const s = String(word || '').trim();
+    if (!s) return '로';
+    const code = s.charCodeAt(s.length - 1);
+    if (code >= 0xac00 && code <= 0xd7a3) {
+      const jong = (code - 0xac00) % 28;
+      return (jong === 0 || jong === 8) ? '로' : '으로';
+    }
+    return '로';
+  }
+
   /* =========================================================
      3. 상태
      ========================================================= */
@@ -513,7 +525,7 @@ end $$;`;
 
     const av = $('#meetAvatar');
     av.textContent = me ? me.emoji : '🐣';
-    $('#meetAs').textContent = me ? `${me.name}으로 남기기` : '비서를 먼저 등록해 주세요';
+    $('#meetAs').textContent = me ? `${me.name}${roJosa(me.name)} 남기기` : '비서를 먼저 등록해 주세요';
   }
 
   function renderTasks() {
@@ -572,7 +584,7 @@ end $$;`;
 
     const av = $('#memoAvatar');
     av.textContent = me ? me.emoji : '🐣';
-    $('#memoAs').textContent = me ? `${me.name}으로 붙이기` : '비서를 먼저 등록해 주세요';
+    $('#memoAs').textContent = me ? `${me.name}${roJosa(me.name)} 붙이기` : '비서를 먼저 등록해 주세요';
   }
 
   function render() {
