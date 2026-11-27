@@ -863,6 +863,22 @@ end $$;`;
       </div>`;
   }
 
+  function chalkDoodleHTML() {
+    return `
+      <svg class="chalk-chart" viewBox="0 0 200 92" role="img" aria-label="칠판에 그린 상승 차트">
+        <line x1="6" y1="82" x2="194" y2="82" stroke="rgba(255,255,255,.22)" stroke-width="1.4" stroke-dasharray="4 5" />
+        <rect x="14" y="62" width="13" height="19" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.34)" stroke-width="1.4" rx="2" />
+        <rect x="35" y="54" width="13" height="27" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.34)" stroke-width="1.4" rx="2" />
+        <rect x="56" y="64" width="13" height="17" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.34)" stroke-width="1.4" rx="2" />
+        <rect x="77" y="46" width="13" height="35" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.34)" stroke-width="1.4" rx="2" />
+        <polyline points="18,68 42,58 66,56 92,44 118,38 146,24 176,14" fill="none" stroke="rgba(255,253,220,.88)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M168 12 L177 14 L176 23" fill="none" stroke="rgba(255,253,220,.88)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        <circle cx="92" cy="44" r="2.6" fill="rgba(255,253,220,.9)" />
+        <circle cx="146" cy="24" r="2.6" fill="rgba(255,253,220,.9)" />
+      </svg>
+      <p class="chalk-sign">응모 → 기록 → 비교 ✍️</p>`;
+  }
+
   function investBoardHTML() {
     const b = investBoard || INVEST_BOARD_BASE;
     const ev = b.events || {};
@@ -888,6 +904,7 @@ end $$;`;
             <span class="board-chip">${items.length}건</span>
           </div>
           <ul class="chalk-list">${rows || '<li class="chalk-row"><span class="chalk-box"></span><span class="chalk-body"><span class="chalk-title">아직 응모 기록이 없어요</span></span></li>'}</ul>
+          ${chalkDoodleHTML()}
           ${ev.subtitle ? `<p class="board-foot chalk-foot">${esc(ev.subtitle)}</p>` : ''}
         </section>
         <section class="board board--status" aria-label="로또·연금복권 현황판">
