@@ -25,7 +25,7 @@
 
 ## 저장 방식
 
-- **기본**: 브라우저 `localStorage` — 열자마자 바로 동작합니다.
+- **기본**: 브라우저 `localStorage` — 열자마자 바로 동작합니다. 다만 기기마다 내용이 따로 저장되므로, 동료 피클과 **함께** 쓰려면 아래 실시간 연결이 필요합니다.
 - **실시간**: 상단 **● 실시간 대기** 배지 → Supabase Project URL + anon public key 입력 → **연결하기**.
   연결되면 배지가 **● 실시간 연결**로 바뀌고, `office_agents` · `office_messages` · `office_tasks`
   세 테이블을 Realtime 구독해 여러 기기·여러 피클이 즉시 맞춰집니다.

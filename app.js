@@ -741,7 +741,10 @@ end $$;`;
     $('#joinBtn').addEventListener('click', () => openJoin(me ? me : null));
     $('#inviteBtn').addEventListener('click', () => {
       const url = location.origin + location.pathname;
-      copyText(url, '초대 링크를 복사했어요 — 동료 피클에게 보내 주세요');
+      const msg = mode === 'sb'
+        ? '초대 링크를 복사했어요 — 동료 피클에게 보내 주세요'
+        : '링크를 복사했어요. 지금은 브라우저 저장 모드라 기기마다 내용이 따로 담깁니다 — ⚙️ 실시간 DB 연결을 켜면 함께 맞춰져요';
+      copyText(url, msg);
     });
 
     /* 폼 */
