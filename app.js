@@ -198,6 +198,7 @@ end $$;`;
   /* 예전 표기 이름 → 지금 이름 */
   const LEGACY_PERSON = { '승준님': 'Thomas' };
   const LEGACY_AI = { '피콜로': 'Piccolo' };
+  const LEGACY_SEED_LINE = '승준님, 오피스 맵부터 눌러 보세요.';
   const SEED_FLAG_KEY = 'pickleOffice.seed.v2';
 
   function seedAgent() {
@@ -222,6 +223,7 @@ end $$;`;
       if (!STATUS[a.status]) a.status = 'waiting';
       if (LEGACY_AI[a.name]) a.name = LEGACY_AI[a.name];
       if (LEGACY_PERSON[a.owner]) a.owner = LEGACY_PERSON[a.owner];
+      if (a.line === LEGACY_SEED_LINE) a.line = SEED_AGENT.line;
     });
     const meAgent = db.agents.find((a) => a.handle === SEED_AGENT.handle);
     if (meAgent && !meAgent.owner) meAgent.owner = SEED_AGENT.owner;
@@ -229,15 +231,36 @@ end $$;`;
     return db;
   }
 
-  /* 브라우저에 저장된 '내 비서' 이름표도 새 표기로 맞춥니다. */
-  function migrateMe() {
-    if (!me) return;
-    const name = LEGACY_AI[me.name] || me.name;
-    const owner = LEGACY_PERSON[me.owner] || me.owner;
-    if (name !== me.name || owner !== me.owner) {
-      me = { ...me, name, owner };
-      writeJSON(ME_KEY, me);
+  /* 브라우저에 저장된 예전 표기(승준님·피콜로)를 새 이름으로 맞춥니다. (한 번만 실행) */
+  function migrateNames() {
+    const NAMES_FLAG_KEY = 'pickleOffice.names.v1';
+    if (readJSON(NAMES_FLAG_KEY, false)) return;
+    const fixAgent = (a) => {
+      if (!a) return;
+      if (LEGACY_AI[a.name]) a.name = LEGACY_AI[a.name];
+      if (LEGACY_PERSON[a.owner]) a.owner = LEGACY_PERSON[a.owner];
+      if (a.line === LEGACY_SEED_LINE) a.line = SEED_AGENT.line;
+    };
+    if (me) {
+      const next = { ...me };
+      fixAgent(next);
+      if (next.name !== me.name || next.owner !== me.owner || next.line !== me.line) {
+        me = next;
+        writeJSON(ME_KEY, me);
+      }
     }
+    const db = readJSON(LOCAL_KEY, null);
+    if (db && Array.isArray(db.agents)) {
+      db.agents.forEach(fixAgent);
+      (db.messages || []).forEach((m) => {
+        if (m.handle === SEED_AGENT.handle && LEGACY_AI[m.author]) m.author = LEGACY_AI[m.author];
+      });
+      (db.tasks || []).forEach((t) => {
+        if (LEGACY_AI[t.assignee]) t.assignee = LEGACY_AI[t.assignee];
+      });
+      writeJSON(LOCAL_KEY, db);
+    }
+    writeJSON(NAMES_FLAG_KEY, true);
   }
 
   function localDB() {
@@ -979,7 +1002,7 @@ end $$;`;
     fillSelects();
     bindEvents();
 
-    migrateMe();
+    migrateNames();
     await refresh();
 
     const hash = (location.hash || '').replace('#', '');
