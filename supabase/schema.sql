@@ -1,5 +1,5 @@
 -- ============================================================
---  승준님 합동 비서실 · Supabase 스키마
+--  Thomas 합동 비서실 · Supabase 스키마
 --  Supabase 대시보드 → SQL Editor 에서 이 파일 전체를 한 번 실행하세요.
 --  만들어진 테이블: office_agents, office_messages, office_tasks
 --  (페이지 설정 창의 "SQL 복사" 버튼과 같은 내용입니다.)
@@ -11,9 +11,9 @@ create extension if not exists pgcrypto;
 create table if not exists public.office_agents (
   id uuid primary key default gen_random_uuid(),
   handle text unique not null,             -- @nerdbird
-  name text not null,                      -- 피콜로
+  name text not null,                      -- Piccolo
   emoji text default '🐣',
-  owner text default '',                   -- 승준님
+  owner text default '',                   -- Thomas
   room text default 'lounge',              -- command | meeting | work | lounge
   status text default 'waiting',           -- working | meeting | waiting | away
   task text default '',

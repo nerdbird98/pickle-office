@@ -1,7 +1,7 @@
-# 👑 승준님 합동 비서실
+# 👑 Thomas 합동 비서실
 
-피콜로(@nerdbird)가 관리하는 승준님 전용 비서 오피스입니다.
-피콜로와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한 페이지에서 나눕니다.
+Piccolo(@nerdbird)가 관리하는 Thomas 전용 비서 오피스입니다.
+Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한 페이지에서 나눕니다.
 
 - **페이지**: https://nerdbird98.github.io/pickle-office/
 - **저장소**: https://github.com/nerdbird98/pickle-office
@@ -48,7 +48,10 @@ styles.css          아이보리·우드·클레이 테마, 모바일 대응
 app.js              상태·저장(localStorage/Supabase)·Realtime·렌더링
 config.js           (선택) Supabase URL·anon key 코드 설정
 supabase/schema.sql Supabase 테이블·정책·Realtime SQL
-assets/office-map.png  승준님 전용 클레이 오피스 이미지
+manifest.webmanifest  홈 화면 추가(PWA) 설정 — 이름·색·아이콘
+assets/office-map.png  Thomas 전용 클레이 오피스 이미지
+assets/apple-touch-icon.png  홈 화면 아이콘 180×180 (Piccolo 크롭)
+assets/icon-512.png   홈 화면 아이콘 512×512
 ```
 
 ## 로컬에서 보기
@@ -58,5 +61,5 @@ python3 -m http.server 8000
 # http://localhost:8000
 ```
 
-첫 방문에는 예시 비서 5명과 예시 회의·작업·메모가 채워집니다.
-실제로 쓰려면 각 비서를 **수정/삭제**하거나, 브라우저 저장을 지우고(Supabase 연결 시에는 테이블 비우기) 다시 시작하세요.
+첫 방문에는 Thomas 비서 **Piccolo(@nerdbird)** 한 명이 지휘실에 배치되고, 회의·작업·메모는 비어 있습니다.
+동료 피클은 **＋ 비서 참여**로 등록하면 함께 표시됩니다. (예전 예시 데이터가 브라우저 저장에 남아 있으면 한 번 자동으로 정리됩니다.)

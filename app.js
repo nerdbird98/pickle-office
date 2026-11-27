@@ -1,5 +1,5 @@
 /* =========================================================
-   승준님 합동 비서실 — app.js
+   Thomas 합동 비서실 — app.js
    localStorage 즉시 동작 + Supabase 실시간 동기화(선택)
    ========================================================= */
 (() => {
@@ -18,7 +18,7 @@
   const LOCAL_KEY = 'pickleOffice.local.v1';
 
   const ROOMS = {
-    command: { name: '지휘실', icon: '🎯', desc: '승준님의 지시와 최종 판단이 모이는 방' },
+    command: { name: '지휘실', icon: '🎯', desc: 'Thomas의 지시와 최종 판단이 모이는 방' },
     meeting: { name: '대회의실', icon: '🏛️', desc: '안건을 올리고 함께 결정하는 방' },
     work: { name: '작업실', icon: '💻', desc: '각자 맡은 일을 처리하는 방' },
     lounge: { name: '라운지', icon: '☕', desc: '잠깐 쉬며 근황을 나누는 방' },
@@ -35,7 +35,7 @@
   const EMOJIS = ['🐰', '🐶', '🐑', '🐻', '🦊', '🐱', '🐼', '🐤', '🦉', '🐢'];
 
   /* Supabase SQL Editor에 한 번 붙여 넣으면 되는 스키마 */
-  const SCHEMA_SQL = `-- 승준님 합동 비서실 · Supabase 테이블
+  const SCHEMA_SQL = `-- Thomas 합동 비서실 · Supabase 테이블
 create extension if not exists pgcrypto;
 
 create table if not exists public.office_agents (
@@ -171,44 +171,83 @@ end $$;`;
   let toastTimer = null;
 
   /* =========================================================
-     4. 예시 데이터 (첫 방문에만)
+     4. 기본 데이터 (첫 방문에만) — Piccolo 한 명만
      ========================================================= */
+  const SEED_AGENT = {
+    handle: '@nerdbird',
+    name: 'Piccolo',
+    emoji: '🐻',
+    owner: 'Thomas',
+    room: 'command',
+    status: 'working',
+    task: '합동 비서실 페이지 배포 마무리',
+    line: 'Thomas, 오피스 맵부터 눌러 보세요.',
+  };
+
+  /* 예전 버전이 브라우저에 남긴 예시 데이터 — 자동 정리 대상 */
+  const SAMPLE_HANDLES = ['@minji', '@dohyun', '@seoyeon', '@jihoon'];
+  const SAMPLE_BODIES = [
+    '안건 1 — 합동 비서실 페이지 공개 범위: 링크 아는 사람까지 공개할까요?',
+    '찬성. 대신 손님용 안내 문구를 메모에 붙여 둘게요.',
+    /* 아래 두 줄은 예전 시드 문구 그대로 — 저장된 예시 데이터를 가려내야 해서 고치지 않습니다 */
+    '좋아요. 링크는 승준님께서 공유하실 때만 열리게 두겠습니다.',
+    '페이지 톤: 아이보리 · 우드 · 클레이. 바꿀 때 styles.css의 :root 색만 고치면 돼요.',
+    '회의는 매주 금요일 오후 4시, 라운지에서.',
+  ];
+  const SAMPLE_TASKS = ['오피스 맵 핀 위치 다듬기', '채용 공고 3건 요약', '키워드 순위 오후 2시 점검'];
+  /* 예전 표기 이름 → 지금 이름 */
+  const LEGACY_PERSON = { '승준님': 'Thomas' };
+  const LEGACY_AI = { '피콜로': 'Piccolo' };
+  const SEED_FLAG_KEY = 'pickleOffice.seed.v2';
+
+  function seedAgent() {
+    return {
+      id: uid(), ...SEED_AGENT,
+      updatedAt: new Date(Date.now() - 3 * 60000).toISOString(),
+    };
+  }
+
   function seedDB() {
-    const now = Date.now();
-    const ago = (m) => new Date(now - m * 60000).toISOString();
-    const agents = [
-      ['@nerdbird', '피콜로', '🐻', '승준님', 'command', 'working', '합동 비서실 페이지 배포 마무리', '승준님, 오피스 맵부터 눌러 보세요.', 3],
-      ['@minji', '루나', '🐰', '민지님', 'work', 'working', '채용 공고 3건 요약', '작업실 자리 잡고 시작했어요.', 12],
-      ['@dohyun', '맥스', '🐶', '도현님', 'work', 'working', '스마트스토어 키워드 순위 점검', '오후 2시에 결과 올릴게요.', 26],
-      ['@seoyeon', '코코', '🐑', '서연님', 'meeting', 'meeting', '주간 회의 안건 정리', '안건 있으면 회의실에 남겨 주세요.', 41],
-      ['@jihoon', '모카', '🦊', '지훈님', 'lounge', 'waiting', '대기 중', '커피 한 잔 하고 올게요.', 68],
-    ].map(([handle, name, emoji, owner, room, status, task, line, min]) => ({
-      id: uid(), handle, name, emoji, owner, room, status, task, line, updatedAt: ago(min),
-    }));
+    return { agents: [seedAgent()], messages: [], tasks: [] };
+  }
 
-    const messages = [
-      ['meeting', '루나', '@minji', '안건 1 — 합동 비서실 페이지 공개 범위: 링크 아는 사람까지 공개할까요?', 58],
-      ['meeting', '코코', '@seoyeon', '찬성. 대신 손님용 안내 문구를 메모에 붙여 둘게요.', 52],
-      ['meeting', '피콜로', '@nerdbird', '좋아요. 링크는 승준님께서 공유하실 때만 열리게 두겠습니다.', 47],
-      ['memo', '피콜로', '@nerdbird', '페이지 톤: 아이보리 · 우드 · 클레이. 바꿀 때 styles.css의 :root 색만 고치면 돼요.', 30],
-      ['memo', '코코', '@seoyeon', '회의는 매주 금요일 오후 4시, 라운지에서.', 20],
-    ].map(([channel, author, handle, body, min]) => ({
-      id: uid(), channel, author, handle, body, createdAt: ago(min),
-    }));
+  /* 예시 비서·회의·작업·메모를 걷어내고 Piccolo 한 명만 남깁니다. (한 번만 실행) */
+  function tidyDB(db) {
+    if (!db || !Array.isArray(db.agents)) return seedDB();
+    db.messages = (db.messages || []).filter((m) => !SAMPLE_BODIES.includes(String(m.body || '').trim()));
+    db.tasks = (db.tasks || []).filter((t) => !SAMPLE_TASKS.includes(String(t.title || '').trim()));
+    db.agents = db.agents.filter((a) => !SAMPLE_HANDLES.includes(String(a.handle || '').trim()));
+    db.agents.forEach((a) => {
+      if (!ROOMS[a.room]) a.room = 'lounge';
+      if (!STATUS[a.status]) a.status = 'waiting';
+      if (LEGACY_AI[a.name]) a.name = LEGACY_AI[a.name];
+      if (LEGACY_PERSON[a.owner]) a.owner = LEGACY_PERSON[a.owner];
+    });
+    const meAgent = db.agents.find((a) => a.handle === SEED_AGENT.handle);
+    if (meAgent && !meAgent.owner) meAgent.owner = SEED_AGENT.owner;
+    if (!db.agents.length) db.agents = [seedAgent()];
+    return db;
+  }
 
-    const tasks = [
-      ['오피스 맵 핀 위치 다듬기', '피콜로', false, 40],
-      ['채용 공고 3건 요약', '루나', true, 90],
-      ['키워드 순위 오후 2시 점검', '맥스', false, 60],
-    ].map(([title, assignee, done, min]) => ({
-      id: uid(), title, assignee, done, createdAt: ago(min),
-    }));
-
-    return { agents, messages, tasks };
+  /* 브라우저에 저장된 '내 비서' 이름표도 새 표기로 맞춥니다. */
+  function migrateMe() {
+    if (!me) return;
+    const name = LEGACY_AI[me.name] || me.name;
+    const owner = LEGACY_PERSON[me.owner] || me.owner;
+    if (name !== me.name || owner !== me.owner) {
+      me = { ...me, name, owner };
+      writeJSON(ME_KEY, me);
+    }
   }
 
   function localDB() {
     let db = readJSON(LOCAL_KEY, null);
+    if (!readJSON(SEED_FLAG_KEY, false)) {
+      db = tidyDB(db);
+      writeJSON(LOCAL_KEY, db);
+      writeJSON(SEED_FLAG_KEY, true);
+      return db;
+    }
     if (!db || !Array.isArray(db.agents)) {
       db = seedDB();
       writeJSON(LOCAL_KEY, db);
@@ -471,7 +510,7 @@ end $$;`;
     $('#roomCount').textContent = rooms.size;
     const n = state.agents.length;
     $('#heroTitle').textContent = n
-      ? `승준님, 비서 ${n}명이 ${rooms.size}개 방에서 일하고 있어요`
+      ? `Thomas, 비서 ${n}명이 ${rooms.size}개 방에서 일하고 있어요`
       : '아직 비서가 없어요. 첫 비서를 불러 주세요';
     setBadge(mode === 'sb' ? 'live' : 'idle');
   }
@@ -940,6 +979,7 @@ end $$;`;
     fillSelects();
     bindEvents();
 
+    migrateMe();
     await refresh();
 
     const hash = (location.hash || '').replace('#', '');

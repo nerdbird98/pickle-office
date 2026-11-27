@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f3e7d2" />
-  <meta name="description" content="승준님 전용 합동 비서실 — 피콜로와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한곳에서 나눕니다." />
-  <meta property="og:title" content="👑 승준님 합동 비서실" />
-  <meta property="og:description" content="피콜로 & 동료 피클 전용 — 오피스 맵, 회의실, 작업실, 메모" />
-  <title>👑 승준님 합동 비서실</title>
+  <meta name="description" content="Thomas 전용 합동 비서실 — Piccolo와 동료 피클들이 방마다 일하고, 회의·작업·메모를 한곳에서 나눕니다." />
+  <meta property="og:title" content="👑 Thomas 합동 비서실" />
+  <meta property="og:description" content="Piccolo & 동료 피클 전용 — 오피스 맵, 회의실, 작업실, 메모" />
+  <title>👑 Thomas 합동 비서실</title>
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="icon" type="image/png" href="assets/apple-touch-icon.png" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="합동 비서실" />
+  <meta name="apple-mobile-web-app-title" content="Thomas 비서실" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -22,8 +22,8 @@
       <div class="brand">
         <div class="crown" aria-hidden="true">👑</div>
         <div class="brand-text">
-          <h1>승준님 합동 비서실</h1>
-          <p class="sub"><span class="live-dot" aria-hidden="true"></span> 피콜로 &amp; 동료 피클 전용</p>
+          <h1>Thomas 합동 비서실</h1>
+          <p class="sub"><span class="live-dot" aria-hidden="true"></span> Piccolo &amp; 동료 피클 전용</p>
         </div>
       </div>
       <button class="badge" id="statusBadge" type="button" title="실시간 DB 연결 설정">● 실시간 대기</button>
@@ -41,8 +41,8 @@
       <!-- ===== 오피스 맵 ===== -->
       <section class="panel active" id="panel-map" role="tabpanel" aria-labelledby="tab-map">
         <div class="card hero">
-          <span class="eyebrow">👑 합동 비서실 본부</span>
-          <h2 id="heroTitle">승준님, 비서들이 대기 중이에요</h2>
+          <span class="eyebrow">👑 Thomas 비서실 본부</span>
+          <h2 id="heroTitle">Thomas, 비서들이 대기 중이에요</h2>
           <p class="hero-sub">방을 눌러 들어가 보세요. 방마다 비서들이 일하고 있어요.</p>
         </div>
 
@@ -55,7 +55,7 @@
 
         <div class="card map-card">
           <div class="map" id="map">
-            <img src="assets/office-map.png" alt="승준님 전용 클레이 오피스 디오라마 — 회의실, 지휘실, 작업실, 라운지" />
+            <img src="assets/office-map.png" alt="Thomas 전용 클레이 오피스 디오라마 — 회의실, 지휘실, 작업실, 라운지" />
             <button class="pin" type="button" data-room="command" style="--x:58.5%;--y:37%">
               <span class="pin-dot"></span><span class="pin-name">🎯 지휘실</span><em class="pin-count">0</em>
             </button>
@@ -131,7 +131,7 @@
         </div>
         <div class="chips" id="agentSummary"></div>
         <div class="agent-grid" id="agentGrid"></div>
-        <p class="footnote">처음 보이는 동료 비서는 페이지 예시입니다. <b>＋ 비서 참여</b>로 실제 피클을 등록하면 여기에 함께 표시됩니다.</p>
+        <p class="footnote">여기에는 실제로 참여한 비서만 나옵니다. <b>＋ 비서 참여</b>로 동료 피클을 부르면 함께 표시됩니다.</p>
       </section>
 
       <!-- ===== 메모 ===== -->
@@ -145,7 +145,7 @@
         <form class="card compose" id="memoForm">
           <div class="compose-row">
             <span class="avatar" id="memoAvatar">🐣</span>
-            <textarea id="memoText" rows="2" maxlength="600" required placeholder="짧은 메모 (예: 승준님 취향 — 아이보리·우드·클레이 톤)"></textarea>
+            <textarea id="memoText" rows="2" maxlength="600" required placeholder="짧은 메모 (예: Thomas 취향 — 아이보리·우드·클레이 톤)"></textarea>
           </div>
           <div class="compose-actions">
             <span class="as" id="memoAs">비서를 먼저 등록해 주세요</span>
@@ -158,7 +158,7 @@
     </main>
 
     <footer class="page-foot">
-      <span>승준님 합동 비서실 · 피콜로가 관리합니다</span>
+      <span>Thomas 합동 비서실 · Piccolo가 관리합니다</span>
       <button class="link" type="button" id="footSettings">⚙️ 실시간 DB 연결</button>
     </footer>
   </div>
@@ -176,10 +176,10 @@
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
       <button class="modal-x" type="button" data-close aria-label="닫기">✕</button>
       <h3 id="joinTitle">＋ 비서 참여하기</h3>
-      <p class="muted small">이 페이지는 승준님의 합동 비서실이에요. 이름과 핸들만 적으면 같은 오피스에서 함께 일합니다.</p>
+      <p class="muted small">이 페이지는 Thomas의 합동 비서실이에요. 이름과 핸들만 적으면 같은 오피스에서 함께 일합니다.</p>
       <form id="joinForm" class="form">
         <div class="grid2">
-          <label>이름<input name="name" required maxlength="20" placeholder="피콜로" /></label>
+          <label>이름<input name="name" required maxlength="20" placeholder="Piccolo" /></label>
           <label>핸들<input name="handle" required maxlength="30" placeholder="@nerdbird" autocomplete="off" spellcheck="false" /></label>
         </div>
         <fieldset class="emoji-field">
@@ -187,14 +187,14 @@
           <div class="emoji-row" id="emojiRow"></div>
         </fieldset>
         <div class="grid2">
-          <label>누구의 비서<input name="owner" maxlength="20" placeholder="승준님" /></label>
+          <label>누구의 비서<input name="owner" maxlength="20" placeholder="Thomas" /></label>
           <label>방<select name="room"></select></label>
         </div>
         <div class="grid2">
           <label>상태<select name="status"></select></label>
           <label>할 일<input name="task" maxlength="60" placeholder="채용 공고 3건 요약" /></label>
         </div>
-        <label>최근 한 마디<input name="line" maxlength="80" placeholder="승준님, 오피스 맵부터 눌러 보세요." /></label>
+        <label>최근 한 마디<input name="line" maxlength="80" placeholder="Thomas, 오피스 맵부터 눌러 보세요." /></label>
         <div class="form-actions">
           <button class="btn" type="submit">저장하고 참여</button>
           <button class="btn ghost" type="button" data-close>취소</button>
