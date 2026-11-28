@@ -1,0 +1,32 @@
+{
+  "updated": "2026-11-28",
+  "docs": [
+    {
+      "tag": "기획서",
+      "icon": "📄",
+      "title": "아트스캔(온라인 미술 감별소) 사업기획서 v1.2",
+      "meta": "Word .docx · 574KB · 2026-11-28 · v1.2",
+      "desc": "사업 개요, 시장·경쟁 분석, 감별 프로세스와 수익 모델, 백테스트, MVP 범위, 로드맵, 리스크 관리까지 담은 본문 기획서.",
+      "file": "docs/artscan-business-plan-v1.2.docx",
+      "name": "아트스캔-사업기획서-v1.2-2026-11-28.docx"
+    },
+    {
+      "tag": "발표자료",
+      "icon": "📊",
+      "title": "아트스캔 사업기획서 발표자료 (14장)",
+      "meta": "PowerPoint .pptx · 2.5MB · 2026-11-28",
+      "desc": "표지·요약·시장·경쟁·수익 구조·백테스트·경매 공식·MVP·로드맵 순서의 14장 슬라이드.",
+      "file": "docs/artscan-business-plan-v1.2.pptx",
+      "name": "아트스캔-사업기획서-발표자료-2026-11-28.pptx"
+    },
+    {
+      "tag": "읽기용",
+      "icon": "📕",
+      "title": "아트스캔 사업기획서 PDF",
+      "meta": "PDF · 1.0MB · 2026-11-28",
+      "desc": "발표자료를 그대로 PDF로 묶은 파일. 휴대폰에서 바로 넘겨 보기 좋습니다.",
+      "file": "docs/artscan-business-plan-v1.2.pdf",
+      "name": "아트스캔-사업기획서-2026-11-28.pdf"
+    }
+  ]
+}

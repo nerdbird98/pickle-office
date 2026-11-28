@@ -89,6 +89,43 @@
   let investBoard = INVEST_BOARD_BASE;
   let boardFetched = false;
 
+  /* =========================================================
+     자료실 (docs/)
+     목록은 data/documents.json 에 있고, 못 읽으면 아래 기본값으로 보여 줍니다.
+     새 문서는 docs/에 파일을 넣고 documents.json에 한 줄 추가하면 됩니다.
+     ========================================================= */
+  const DOCS_URL = 'data/documents.json?v=1';
+  const DOCS_BASE = {
+    updated: '2026-11-28',
+    docs: [
+      {
+        tag: '기획서', icon: '📄',
+        title: '아트스캔(온라인 미술 감별소) 사업기획서 v1.2',
+        meta: 'Word .docx · 574KB · 2026-11-28 · v1.2',
+        desc: '사업 개요, 시장·경쟁 분석, 감별 프로세스와 수익 모델, 백테스트, MVP 범위, 로드맵, 리스크 관리까지 담은 본문 기획서.',
+        file: 'docs/artscan-business-plan-v1.2.docx',
+        name: '아트스캔-사업기획서-v1.2-2026-11-28.docx',
+      },
+      {
+        tag: '발표자료', icon: '📊',
+        title: '아트스캔 사업기획서 발표자료 (14장)',
+        meta: 'PowerPoint .pptx · 2.5MB · 2026-11-28',
+        desc: '표지·요약·시장·경쟁·수익 구조·백테스트·경매 공식·MVP·로드맵 순서의 14장 슬라이드.',
+        file: 'docs/artscan-business-plan-v1.2.pptx',
+        name: '아트스캔-사업기획서-발표자료-2026-11-28.pptx',
+      },
+      {
+        tag: '읽기용', icon: '📕',
+        title: '아트스캔 사업기획서 PDF',
+        meta: 'PDF · 1.0MB · 2026-11-28',
+        desc: '발표자료를 그대로 PDF로 묶은 파일. 휴대폰에서 바로 넘겨 보기 좋습니다.',
+        file: 'docs/artscan-business-plan-v1.2.pdf',
+        name: '아트스캔-사업기획서-2026-11-28.pdf',
+      },
+    ],
+  };
+  let docsBoard = DOCS_BASE;
+
   /* Supabase SQL Editor에 한 번 붙여 넣으면 되는 스키마 */
   const SCHEMA_SQL = `-- Thomas 연구소 · Supabase 테이블
 create extension if not exists pgcrypto;
@@ -165,6 +202,15 @@ end $$;`;
   const uid = () => (window.crypto && crypto.randomUUID
     ? crypto.randomUUID()
     : 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
+
+  /* esc()를 거친 글 안의 링크를 눌러 열 수 있게 바꿉니다 */
+  function linkify(safeText) {
+    return String(safeText ?? '').replace(/((?:https?:\/\/|www\.)[^\s<]+)/g, (m) => {
+      const tail = m.match(/[.,)\]》」'…]+$/);
+      const url = tail ? m.slice(0, -tail[0].length) : m;
+      return `<a href="${url}" target="_blank" rel="noopener">${url}</a>` + (tail ? tail[0] : '');
+    });
+  }
 
   function readJSON(key, fallback) {
     try {
@@ -634,7 +680,7 @@ end $$;`;
                 <time>${timeAgo(m.createdAt)}</time>
                 <button class="link danger" type="button" data-del-msg="${esc(m.id)}">삭제</button>
               </div>
-              <p class="msg-text">${esc(m.body)}</p>
+              <p class="msg-text">${linkify(esc(m.body))}</p>
             </div>
           </article>`;
       }).join('')
@@ -694,7 +740,7 @@ end $$;`;
       ? notes.map((m, i) => `
         <article class="note note-${(i % 4) + 1}">
           <button class="icon-btn" type="button" data-del-memo="${esc(m.id)}" aria-label="메모 삭제">✕</button>
-          <p>${esc(m.body)}</p>
+          <p>${linkify(esc(m.body))}</p>
           <footer>${esc(m.author)} · ${timeAgo(m.createdAt)}</footer>
         </article>`).join('')
       : '<div class="empty">메모가 아직 없어요. 위에서 첫 메모를 붙여 보세요.</div>';
@@ -709,8 +755,52 @@ end $$;`;
     renderMap();
     renderMeeting();
     renderTasks();
+    renderDocs();
     renderAgents();
     renderMemos();
+  }
+
+  /* ---------- 자료실 ---------- */
+  function renderDocs() {
+    const box = $('#docGrid');
+    if (!box) return;
+    const list = Array.isArray(docsBoard.docs) ? docsBoard.docs : [];
+    const chips = $('#docChips');
+    if (chips) {
+      chips.innerHTML = `<span class="chip">📎 문서 <b>${list.length}</b>개</span>` +
+        (docsBoard.updated ? `<span class="chip">🗓️ 최근 갱신 <b>${esc(docsBoard.updated)}</b></span>` : '');
+    }
+    box.innerHTML = list.length
+      ? list.map((d) => `
+        <article class="doc">
+          <div class="doc-head">
+            <span class="doc-icon" aria-hidden="true">${esc(d.icon || '📄')}</span>
+            <div class="doc-title">
+              ${d.tag ? `<span class="tag">${esc(d.tag)}</span>` : ''}
+              <b>${esc(d.title || '')}</b>
+              <span class="doc-meta">${esc(d.meta || '')}</span>
+            </div>
+          </div>
+          ${d.desc ? `<p class="doc-desc">${esc(d.desc)}</p>` : ''}
+          <div class="doc-actions">
+            <a class="btn ghost doc-dl" href="${esc(d.file)}" download="${esc(d.name || '')}">⬇ 내려받기</a>
+            <a class="link" href="${esc(d.file)}" target="_blank" rel="noopener">새 창에서 열기</a>
+          </div>
+        </article>`).join('')
+      : '<div class="empty">아직 올린 자료가 없어요. docs/ 폴더에 파일을 넣고 data/documents.json에 적으면 여기에 나옵니다.</div>';
+  }
+
+  async function loadDocs() {
+    try {
+      const res = await fetch(DOCS_URL, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (data && Array.isArray(data.docs)) docsBoard = data;
+    } catch (e) {
+      console.warn('[documents] 기본 목록으로 표시합니다', e);
+      docsBoard = DOCS_BASE;
+    }
+    renderDocs();
   }
 
   /* =========================================================
@@ -1230,9 +1320,10 @@ end $$;`;
     migrateNames();
     await refresh();
     loadInvestBoard();
+    loadDocs();
 
     const hash = (location.hash || '').replace('#', '');
-    if (['map', 'meeting', 'tasks', 'agents', 'memo'].includes(hash)) switchTab(hash);
+    if (['map', 'meeting', 'tasks', 'docs', 'agents', 'memo'].includes(hash)) switchTab(hash);
 
     const codeCfg = window.PICKLE_OFFICE_CONFIG || {};
     const saved = readJSON(CFG_KEY, null);

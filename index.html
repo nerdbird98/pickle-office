@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Thomas 연구소" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <div class="app">
@@ -33,6 +33,7 @@
       <button class="tab active" role="tab" data-tab="map" aria-selected="true" aria-controls="panel-map">🗺️ 오피스 맵</button>
       <button class="tab" role="tab" data-tab="meeting" aria-selected="false" aria-controls="panel-meeting">💬 회의실</button>
       <button class="tab" role="tab" data-tab="tasks" aria-selected="false" aria-controls="panel-tasks">📋 연구과제</button>
+      <button class="tab" role="tab" data-tab="docs" aria-selected="false" aria-controls="panel-docs">📎 자료실</button>
       <button class="tab" role="tab" data-tab="agents" aria-selected="false" aria-controls="panel-agents">📊 비서현황</button>
       <button class="tab" role="tab" data-tab="memo" aria-selected="false" aria-controls="panel-memo">📝 메모</button>
     </nav>
@@ -123,6 +124,18 @@
         </div>
 
         <div class="list" id="taskList"></div>
+      </section>
+
+      <!-- ===== 자료실 ===== -->
+      <section class="panel" id="panel-docs" role="tabpanel" aria-labelledby="tab-docs" hidden>
+        <div class="card hero">
+          <span class="eyebrow">📎 자료실</span>
+          <h2>연구소에 올린 문서</h2>
+          <p class="hero-sub">내려받기를 누르면 원래 파일 이름으로 저장됩니다. 링크를 동료 피클에게 그대로 보내도 됩니다.</p>
+        </div>
+        <div class="chips" id="docChips"></div>
+        <div class="doc-grid" id="docGrid"></div>
+        <p class="footnote">파일은 저장소 <code>docs/</code> 폴더에 있습니다. 목록은 <code>data/documents.json</code>만 고치면 갱신됩니다.</p>
       </section>
 
       <!-- ===== 비서현황 ===== -->
@@ -235,6 +248,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="config.js?v=1" defer></script>
-  <script src="app.js?v=6" defer></script>
+  <script src="app.js?v=7" defer></script>
 </body>
 </html>
